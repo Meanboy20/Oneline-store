@@ -1,0 +1,65 @@
+Header {
+  font-size: 30px;
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  color: white !important;
+}
+
+.ant-layout-footer {
+  margin-bottom: 1px;
+}
+
+.anticon.anticon-shopping-cart {
+  size: 100px;
+  color: white;
+  align-self: right;
+}
+
+.signIn-button-head {
+  color: white;
+  font-size: 20px;
+}
+
+.shopping-cart {
+  font-size: 20px;
+  color: white;
+}
+
+.s-box {
+  display: flex;
+  align-items: center;
+  padding: 50px;
+  min-height: 30px;
+}
+
+.s-input {
+  border: 1px solid #ddd;
+  font-size: 16px;
+  border-radius: 10px;
+  width: 528px;
+  max-height: 50px;
+}
+.site-layout-content {
+  min-height: 550px;
+  padding: 24px;
+  background: #fff;
+  text-align: center;
+}
+.logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+.ant-row-rtl .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
+[data-theme="dark"] .site-layout-content {
+  background: #141414;
+}

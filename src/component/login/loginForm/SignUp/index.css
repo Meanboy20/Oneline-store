@@ -1,0 +1,36 @@
+.customer-form-checkbox {
+  margin-top: 28px;
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.customer-form-submit-button {
+  margin-top: 18px;
+  border-radius: 4px;
+  width: 100%;
+  height: 40px;
+  color: white;
+  background-color: #7391be;
+}
+
+.customer-form-submit-button:hover {
+  background-color: #4b638b;
+}
+
+.customer-form-disclaimer {
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 17px;
+  margin-top: 17px;
+  color: #545454;
+}
+
+.customer-form-disclaimer a {
+  color: #545454;
+  text-decoration: underline;
+}

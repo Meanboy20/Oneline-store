@@ -1,0 +1,9 @@
+.sigin-footer {
+  display: flexbox;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.forgot-passwrd {
+  float: right;
+}
