@@ -2,13 +2,20 @@ import React, { useState } from "react";
 import "antd/dist/antd.min.css";
 import "./index.css";
 import { Button, Checkbox, Form, Input } from "antd";
+import { signUp } from "../../../../api";
 
-const SignUp = ({ changeModal }) => {
-  const [userInput, setUserInput] = useState("");
-
+const SignUp = ({ changeModal, setVisible }) => {
   const handleSiginClick = () => {
     changeModal("signIn");
   };
+  const onFinish = async (value) => {
+    setVisible(false);
+
+    await signUp()(value);
+    alert("Create account successfully, please use sign in");
+    changeModal("signIn");
+  };
+
   return (
     <div>
       <h2>Sign up an account</h2>
@@ -20,10 +27,7 @@ const SignUp = ({ changeModal }) => {
         wrapperCol={{
           span: 16,
         }}
-        initialValues={{
-          remember: true,
-        }}
-        // onFinish={onFinish}
+        onFinish={onFinish}
         // onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
@@ -51,17 +55,6 @@ const SignUp = ({ changeModal }) => {
           ]}
         >
           <Input.Password />
-        </Form.Item>
-
-        <Form.Item
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
-          <Checkbox>Remember me</Checkbox>
         </Form.Item>
 
         <Form.Item

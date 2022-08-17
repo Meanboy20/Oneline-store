@@ -4,7 +4,7 @@ import "antd/dist/antd.min.css";
 import "./index.css";
 import { Layout } from "antd";
 import Modal from "../../common/Modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UpdatePW from "../login/loginForm/UpdatePassWord";
 import SignUp from "../login/loginForm/SignUp";
 import SignIn from "../login/loginForm/SignIn";
@@ -13,15 +13,24 @@ import Cart from "../Cart";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../../common/Header";
 import { signOut } from "../../redux/reducer";
+import { getAllProduct } from "../../api";
 
 function Home() {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    getAllProduct(dispatch)();
+  }, []);
+
   const { Content, Footer } = Layout;
   const [isVisible, setVisible] = useState(false);
   const [modalContent, setModalContent] = useState("signIn");
-  const { shoppingCart, userType } = useSelector((state) => state);
-
-  console.log(userType, shoppingCart);
+  const { shoppingCart, userType } = useSelector((state) => {
+    return state.userReducer;
+  });
+  const products = useSelector((state) => {
+    return state.productReducer;
+  });
 
   const handleUserIconClick = () => {
     if (userType === "unauthorized") {
@@ -53,13 +62,13 @@ function Home() {
       case "signIn":
         return <SignIn changeModal={setModalContent} setVisible={setVisible} />;
       case "signUp":
-        return <SignUp changeModal={setModalContent} />;
+        return <SignUp changeModal={setModalContent} setVisible={setVisible} />;
       case "updatePassword":
         return <UpdatePW changeModal={setModalContent} />;
       case "emailSent":
         return <PassWordResetting />;
       case "shoppingCart":
-        return <Cart />;
+        return <Cart shoppingCart={shoppingCart} />;
       default:
         return <SignIn />;
     }
@@ -79,7 +88,7 @@ function Home() {
         }}
       >
         <div className="site-layout-content">
-          <ProductList productList={shoppingCart} />
+          <ProductList productList={products} />
         </div>
       </Content>
       <Modal

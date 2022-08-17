@@ -18,7 +18,6 @@ const onlineStoreReducer = createSlice({
     },
 
     signIn: (state, action) => {
-      console.log(action.payload);
       return {
         ...state,
         userType: action.payload.userType,
@@ -67,6 +66,27 @@ const onlineStoreReducer = createSlice({
   },
 });
 
+const productReducers = createSlice({
+  name: "product",
+  initialState: [],
+  reducers: {
+    getProduct: (state, action) => [...action.payload],
+
+    addProduct: (state, action) => {
+      state.productList.push(action.payload);
+      return state;
+    },
+    editProduct: (state, action) => {
+      state.productList.push(action.payload);
+      return state;
+    },
+  },
+});
+
 export const { addUser, signIn, signOut, updateProduct } =
   onlineStoreReducer.actions;
+
+export const { getProduct, addProduct, editProduct } = productReducers.actions;
+
 export const reducer = onlineStoreReducer.reducer;
+export const productReducer = productReducers.reducer;

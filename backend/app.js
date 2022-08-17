@@ -43,11 +43,11 @@ db.once("open", () => {
 // app.use("/users", usersRouter);
 
 // Create new user
-app.post("/", async (req, res) => {
+app.post("/user", async (req, res) => {
   const newUser = new users({
-    email: req.body.email,
+    email: req.body.Email,
     password: req.body.password,
-    userType: req.body.userType,
+    userType: req.body.Email === "admin@gmail.com" ? "admin" : "customer",
   });
   try {
     const adduser = await newUser.save();
@@ -75,6 +75,16 @@ app.patch("/:id", getUser, async (req, res) => {
   }
 });
 
+//Get all product
+app.get("", async (req, res) => {
+  try {
+    const productList = await products.find();
+    res.json(productList);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 // Create new product
 app.post("/product", async (req, res) => {
   const newProduct = new products({
@@ -82,7 +92,10 @@ app.post("/product", async (req, res) => {
     price: req.body.price,
     quantity: req.body.quantity,
     description: req.body.description,
+    image: req.body.image,
+    Category: req.body.Category,
   });
+
   try {
     const addProduct = await newProduct.save();
     res.status(201).json(addProduct);
@@ -97,8 +110,8 @@ app.patch("/product/:id", getProduct, async (req, res) => {
     res.product.price = req.body.price;
   }
   try {
-    const updateUser = await res.product.save();
-    res.json(updateUser);
+    const updateProduct = await res.product.save();
+    res.json(updateProduct);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
