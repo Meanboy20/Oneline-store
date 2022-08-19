@@ -3,15 +3,18 @@ import "antd/dist/antd.min.css";
 import "./index.css";
 import { Button, Checkbox, Form, Input } from "antd";
 import { signUp } from "../../../../api";
+import { useDispatch } from "react-redux";
+import { addNewUser } from "../../../../redux/reducer";
 
 const SignUp = ({ changeModal, setVisible }) => {
+  const dispatch = useDispatch();
   const handleSiginClick = () => {
     changeModal("signIn");
   };
-  const onFinish = async (value) => {
+  const onFinish = (value) => {
+    dispatch(addNewUser({ value: value }));
     setVisible(false);
 
-    await signUp()(value);
     alert("Create account successfully, please use sign in");
     changeModal("signIn");
   };

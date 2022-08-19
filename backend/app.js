@@ -63,13 +63,29 @@ app.post("/authentication", getUserByEmail, async (req, res) => {
 });
 
 // Update user shopping cart
-app.patch("/:id", getUser, async (req, res) => {
-  if (req.body.shoppingCart != null) {
-    res.user.shoppingCart = [...res.user.shoppingCart, req.body.shoppingCart];
+app.patch("/user/:id", getUser, async (req, res) => {
+  // console.log("res body is ", req.body);
+
+  const cart = res.user.shoppingCart;
+
+  //check if exists
+  let targetProductId = -1;
+  cart.forEach((element, index) => {
+    return element._id === req.body._id ? (targetProductId = index) : -1;
+  });
+
+  // if exists, update quantity)
+  targetProductId >= 0
+    ? (cart[targetProductId].quantity += req.body.quantity)
+    : (cart.push(req.body), console.log("Run code"));
+
+  if (targetProductId !== -1 && cart[targetProductId].quantity === 0) {
+    cart.splice(targetProductId, 1);
   }
   try {
-    const updateUser = await res.user.save();
-    res.json(updateUser);
+    const updatedUser = await res.user.save();
+
+    res.json(updatedUser);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -108,6 +124,13 @@ app.post("/product", async (req, res) => {
 app.patch("/product/:id", getProduct, async (req, res) => {
   if (req.body.price != null) {
     res.product.price = req.body.price;
+  }
+  if (req.body.item != null) {
+    res.product.item = req.body.item;
+  }
+
+  if (req.body.description != null) {
+    res.product.description = req.body.description;
   }
   try {
     const updateProduct = await res.product.save();

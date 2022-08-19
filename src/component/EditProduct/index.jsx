@@ -7,29 +7,38 @@ import Header from "../../common/Header";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../common/Modal";
 import { getAllProduct } from "../../api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { getProduct, updateProduct } from "../../redux/reducer";
 
 const { TextArea } = Input;
 const { Content, Footer } = Layout;
 
 const EditProduct = () => {
+  const nevigate = useNavigate();
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getAllProduct(dispatch)();
-  }, []);
+    dispatch(getProduct());
+  }, [dispatch]);
 
   const { userType } = useSelector((state) => {
     return state.userReducer;
   });
 
-  const products = useSelector((state) => {
+  const { products, status } = useSelector((state) => {
     return state.productReducer;
   });
 
   const param = useParams();
 
-  const onFinish = (values) => {};
+  const onFinish = (value) => {
+    // console.log("input is ", values);
+
+    dispatch(updateProduct({ id: param.id, value }));
+    nevigate("/");
+    // dispatch(getProduct());
+  };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -41,71 +50,81 @@ const EditProduct = () => {
 
   const currentProduct = currentProducts[0];
 
-  console.log(currentProduct);
+  console.log("curr is", currentProduct);
 
   return (
     <>
       <Layout className="layout">
         <Header userType={userType} />
-
-        <Content
-          style={{
-            padding: "0px",
-          }}
-        >
-          <div className="site-layout-content">
-            {" "}
-            <Form
-              name="basic"
-              labelCol={{
-                span: 4,
-              }}
-              wrapperCol={{
-                span: 14,
-              }}
-              layout="horizontal"
-              validateTrigger="onSubmit"
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-            >
-              <Form.Item label="item" name="item">
-                <Input />
-              </Form.Item>
-
-              <Form.Item label="description" name="description">
-                <TextArea rows={4} />
-              </Form.Item>
-
-              <Form.Item label="Category" name="Category">
-                <Select>
-                  <Select.Option value="Ele">Ele</Select.Option>
-                </Select>
-              </Form.Item>
-
-              <Form.Item label="price" name="price">
-                <InputNumber />
-              </Form.Item>
-
-              <Form.Item label="quantity" name="quantity">
-                <InputNumber />
-              </Form.Item>
-
-              <Form.Item label="Add Image Link" name="image">
-                <Input />
-              </Form.Item>
-              <Form.Item
-                wrapperCol={{
-                  offset: 8,
-                  span: 16,
+        {status !== "success" ? (
+          <></>
+        ) : (
+          <Content
+            style={{
+              padding: "0px",
+            }}
+          >
+            <div className="site-layout-content">
+              {" "}
+              <Form
+                name="basic"
+                labelCol={{
+                  span: 4,
                 }}
+                wrapperCol={{
+                  span: 14,
+                }}
+                layout="horizontal"
+                validateTrigger="onSubmit"
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
               >
-                <Button type="primary" htmlType="submit" onClick={() => {}}>
-                  Submit{" "}
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </Content>
+                <Form.Item label="item" name="item">
+                  <Input placeholder={currentProduct.item} />
+                </Form.Item>
+
+                <Form.Item label="description" name="description">
+                  <TextArea placeholder={currentProduct.description} rows={4} />
+                  {console.log(this)}
+                </Form.Item>
+
+                <Form.Item label="Category" name="Category">
+                  <Select>
+                    <Select.Option
+                      value="Ele"
+                      initialvalue={currentProduct.Category}
+                    >
+                      Ele
+                    </Select.Option>
+                  </Select>
+                </Form.Item>
+
+                <Form.Item label="price" name="price">
+                  <InputNumber initialvalue={currentProduct.price} />
+                </Form.Item>
+
+                <Form.Item label="quantity" name="quantity">
+                  <InputNumber initialvalue={currentProduct.quantity} />
+                </Form.Item>
+
+                <Form.Item label="Add Image Link" name="image">
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                  }}
+                >
+                  <Button type="primary" htmlType="submit" onClick={() => {}}>
+                    Submit{" "}
+                  </Button>
+                </Form.Item>
+              </Form>
+            </div>
+          </Content>
+        )}
+
         <Modal
         //   width={"393px"}
         //   visible={isVisible}

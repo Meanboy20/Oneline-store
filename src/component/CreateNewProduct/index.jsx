@@ -4,16 +4,18 @@ import "antd/dist/antd.min.css";
 import "./index.css";
 import { Form, Input, Button, Select, InputNumber } from "antd";
 import Header from "../../common/Header";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../common/Modal";
-import { addNewProduct } from "../../api";
+import { addNewProduct } from "../../redux/reducer";
+import { useNavigate } from "react-router-dom";
 
 const { TextArea } = Input;
 const { Content, Footer } = Layout;
 
 const CreateProduct = () => {
   const [componentDisabled, setComponentDisabled] = useState(false);
-
+  const nevigate = useNavigate();
+  const dispatch = useDispatch();
   const onFormLayoutChange = ({ disabled }) => {
     setComponentDisabled(disabled);
   };
@@ -25,7 +27,8 @@ const CreateProduct = () => {
   console.log(userType);
 
   const onFinish = (values) => {
-    addNewProduct()(values);
+    dispatch(addNewProduct({ value: values }));
+    nevigate("/");
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -59,29 +62,86 @@ const CreateProduct = () => {
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
             >
-              <Form.Item label="item" name="item">
+              <Form.Item
+                label="item"
+                name="item"
+                rules={[
+                  {
+                    required: true,
+                    message: "The input is not valid E-mail!",
+                  },
+                ]}
+              >
                 <Input />
               </Form.Item>
 
-              <Form.Item label="description" name="description">
+              <Form.Item
+                label="description"
+                name="description"
+                rules={[
+                  {
+                    required: true,
+                    message: "The input is not valid E-mail!",
+                  },
+                ]}
+              >
                 <TextArea rows={4} />
               </Form.Item>
 
-              <Form.Item label="Category" name="Category">
+              <Form.Item
+                label="Category"
+                name="Category"
+                rules={[
+                  {
+                    required: true,
+                    message: "The input is not valid E-mail!",
+                  },
+                ]}
+              >
                 <Select>
-                  <Select.Option value="Ele">Ele</Select.Option>
+                  <Select.Option value="Outdoor">Outdoor</Select.Option>
+                  <Select.Option value="Sports">Sports</Select.Option>
+                  <Select.Option value="Electronics">Electronics</Select.Option>
+                  <Select.Option value="Food">Food</Select.Option>
                 </Select>
               </Form.Item>
 
-              <Form.Item label="price" name="price">
+              <Form.Item
+                label="price"
+                name="price"
+                rules={[
+                  {
+                    required: true,
+                    message: "The input is not valid E-mail!",
+                  },
+                ]}
+              >
                 <InputNumber />
               </Form.Item>
 
-              <Form.Item label="quantity" name="quantity">
+              <Form.Item
+                label="quantity"
+                name="quantity"
+                rules={[
+                  {
+                    required: true,
+                    message: "The input is not valid E-mail!",
+                  },
+                ]}
+              >
                 <InputNumber />
               </Form.Item>
 
-              <Form.Item label="Add Image Link" name="image">
+              <Form.Item
+                label="Add Image Link"
+                name="image"
+                rules={[
+                  {
+                    required: true,
+                    message: "The input is not valid E-mail!",
+                  },
+                ]}
+              >
                 <Input />
               </Form.Item>
               <Form.Item

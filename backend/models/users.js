@@ -13,7 +13,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  shoppingCart: [],
+  shoppingCart: [
+    {
+      _id: { type: String },
+      item: { type: String },
+      price: { type: Number },
+      quantity: { type: Number },
+    },
+  ],
 });
 
 module.exports = mongoose.model("users", userSchema);

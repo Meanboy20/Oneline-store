@@ -3,6 +3,7 @@ import { ProductList } from "../ProductList/index";
 import "antd/dist/antd.min.css";
 import "./index.css";
 import { Layout } from "antd";
+import Header from "../../common/Header";
 import Modal from "../../common/Modal";
 import { useState, useEffect } from "react";
 import UpdatePW from "../login/loginForm/UpdatePassWord";
@@ -11,26 +12,35 @@ import SignIn from "../login/loginForm/SignIn";
 import PassWordResetting from "../login/loginForm/PassWordResetting";
 import Cart from "../Cart";
 import { useDispatch, useSelector } from "react-redux";
-import Header from "../../common/Header";
-import { signOut } from "../../redux/reducer";
-import { getAllProduct } from "../../api";
+import { getProduct, signOut } from "../../redux/reducer";
 
 function Home() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getAllProduct(dispatch)();
-  }, []);
+    console.log("useEffect called");
+    dispatch(getProduct());
+  }, [dispatch]);
 
   const { Content, Footer } = Layout;
   const [isVisible, setVisible] = useState(false);
   const [modalContent, setModalContent] = useState("signIn");
-  const { shoppingCart, userType } = useSelector((state) => {
+  const { shoppingCart, userType, userId, userName } = useSelector((state) => {
     return state.userReducer;
   });
   const products = useSelector((state) => {
     return state.productReducer;
   });
+
+  const quantityInCart = shoppingCart.reduce(
+    (pre, cur) => pre + cur.quantity,
+    0
+  );
+
+  const totalPrice = shoppingCart.reduce(
+    (pre, cur) => pre + cur.price * cur.quantity,
+    0
+  );
 
   const handleUserIconClick = () => {
     if (userType === "unauthorized") {
@@ -68,7 +78,7 @@ function Home() {
       case "emailSent":
         return <PassWordResetting />;
       case "shoppingCart":
-        return <Cart shoppingCart={shoppingCart} />;
+        return <Cart shoppingCart={shoppingCart} userID={userId} />;
       default:
         return <SignIn />;
     }
@@ -80,6 +90,9 @@ function Home() {
         userType={userType}
         userOnClick={handleUserIconClick}
         cartOnClick={handleCartClick}
+        quantityInCart={quantityInCart}
+        totalPrice={(Math.round(totalPrice * 100) / 100).toFixed(2)}
+        userName={userName}
       />
 
       <Content
@@ -88,7 +101,12 @@ function Home() {
         }}
       >
         <div className="site-layout-content">
-          <ProductList productList={products} />
+          <ProductList
+            productList={products.products}
+            userType={userType}
+            userID={userId}
+            shoppingCart={shoppingCart}
+          />
         </div>
       </Content>
       <Modal

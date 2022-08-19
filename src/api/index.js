@@ -55,12 +55,12 @@ export const updateProduct = () => async (id, vaule) => {
   }
 };
 
-export const getAllProduct = (dispatch) => async () => {
+export const getAllProduct = async () => {
   try {
     const response = await fetch("http://localhost:5000/");
 
     const result = await response.json();
-    dispatch(getProduct(result));
+    return result;
   } catch (e) {
     console.log(e);
   }
