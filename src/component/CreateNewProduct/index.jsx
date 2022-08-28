@@ -6,7 +6,7 @@ import { Form, Input, Button, Select, InputNumber } from "antd";
 import Header from "../../common/Header";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../common/Modal";
-import { addNewProduct } from "../../redux/reducer";
+import { addNewProduct, signOut } from "../../redux/reducer";
 import { useNavigate } from "react-router-dom";
 
 const { TextArea } = Input;
@@ -20,11 +20,14 @@ const CreateProduct = () => {
     setComponentDisabled(disabled);
   };
 
-  const { userType } = useSelector((state) => {
+  const { userType, userName } = useSelector((state) => {
     return state.userReducer;
   });
 
-  console.log(userType);
+  const handleUserIconClick = () => {
+    dispatch(signOut());
+    nevigate("/");
+  };
 
   const onFinish = (values) => {
     dispatch(addNewProduct({ value: values }));
@@ -38,8 +41,12 @@ const CreateProduct = () => {
   return (
     <>
       <Layout className="layout">
-        <Header userType={userType} />
-
+        <Header
+          userType={userType}
+          userName={userName}
+          userOnClick={handleUserIconClick}
+        />
+        <h1>Create new product</h1>
         <Content
           style={{
             padding: "0px",

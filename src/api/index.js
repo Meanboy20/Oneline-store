@@ -4,13 +4,14 @@ import { signIn, getProduct } from "../redux/reducer";
 export const signInAuth = (dispatch) => async (vaule) => {
   try {
     const response = await fetch(
-      "http://localhost:5000/authentication",
+      "http://localhost:8080/authentication",
       ajaxConfigHelper(vaule, "POST")
     );
-
     const result = await response.json();
-    dispatch(signIn(...result));
+    dispatch(signIn(result));
+    return result;
   } catch (e) {
+    console.log("Error caught");
     console.log(e);
   }
 };
@@ -19,7 +20,7 @@ export const signUp = (dispatch) => async (vaule) => {
   console.log(vaule);
   try {
     const response = await fetch(
-      "http://localhost:5000/user",
+      "http://localhost:8080/user",
       ajaxConfigHelper(vaule, "POST")
     );
 
@@ -32,7 +33,7 @@ export const signUp = (dispatch) => async (vaule) => {
 export const addNewProduct = () => async (vaule) => {
   try {
     const response = await fetch(
-      "http://localhost:5000/product",
+      "http://localhost:8080/product",
       ajaxConfigHelper(vaule, "POST")
     );
 
@@ -45,7 +46,7 @@ export const addNewProduct = () => async (vaule) => {
 export const updateProduct = () => async (id, vaule) => {
   try {
     const response = await fetch(
-      `http://localhost:5000/product/${id}`,
+      `http://localhost:8080/product/${id}`,
       ajaxConfigHelper(vaule, "PATCH")
     );
 
@@ -57,7 +58,7 @@ export const updateProduct = () => async (id, vaule) => {
 
 export const getAllProduct = async () => {
   try {
-    const response = await fetch("http://localhost:5000/");
+    const response = await fetch("http://localhost:8080/");
 
     const result = await response.json();
     return result;

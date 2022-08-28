@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Layout } from "antd";
 import "antd/dist/antd.min.css";
 import "./index.css";
@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../common/Modal";
 import { getAllProduct } from "../../api";
 import { useNavigate, useParams } from "react-router-dom";
-import { getProduct, updateProduct } from "../../redux/reducer";
+import { getProduct, signOut, updateProduct } from "../../redux/reducer";
 
 const { TextArea } = Input;
 const { Content, Footer } = Layout;
@@ -22,7 +22,7 @@ const EditProduct = () => {
     dispatch(getProduct());
   }, [dispatch]);
 
-  const { userType } = useSelector((state) => {
+  const { userType, userId, userName } = useSelector((state) => {
     return state.userReducer;
   });
 
@@ -31,6 +31,11 @@ const EditProduct = () => {
   });
 
   const param = useParams();
+
+  const handleUserIconClick = () => {
+    dispatch(signOut());
+    nevigate("/");
+  };
 
   const onFinish = (value) => {
     // console.log("input is ", values);
@@ -50,12 +55,16 @@ const EditProduct = () => {
 
   const currentProduct = currentProducts[0];
 
-  console.log("curr is", currentProduct);
+  // console.log("curr is", currentProduct);
 
   return (
     <>
       <Layout className="layout">
-        <Header userType={userType} />
+        <Header
+          userType={userType}
+          userName={userName}
+          userOnClick={handleUserIconClick}
+        />
         {status !== "success" ? (
           <></>
         ) : (
@@ -85,17 +94,16 @@ const EditProduct = () => {
 
                 <Form.Item label="description" name="description">
                   <TextArea placeholder={currentProduct.description} rows={4} />
-                  {console.log(this)}
                 </Form.Item>
 
                 <Form.Item label="Category" name="Category">
                   <Select>
-                    <Select.Option
-                      value="Ele"
-                      initialvalue={currentProduct.Category}
-                    >
-                      Ele
+                    <Select.Option value="Outdoor">Outdoor</Select.Option>
+                    <Select.Option value="Sports">Sports</Select.Option>
+                    <Select.Option value="Electronics">
+                      Electronics
                     </Select.Option>
+                    <Select.Option value="Food">Food</Select.Option>
                   </Select>
                 </Form.Item>
 
@@ -108,7 +116,7 @@ const EditProduct = () => {
                 </Form.Item>
 
                 <Form.Item label="Add Image Link" name="image">
-                  <Input />
+                  <Input placeholder={currentProduct.image} />
                 </Form.Item>
                 <Form.Item
                   wrapperCol={{
@@ -118,6 +126,16 @@ const EditProduct = () => {
                 >
                   <Button type="primary" htmlType="submit" onClick={() => {}}>
                     Submit{" "}
+                  </Button>
+                </Form.Item>
+                <Form.Item
+                  wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                  }}
+                >
+                  <Button type="primary" htmlType="submit" onClick={() => {}}>
+                    Delete{" "}
                   </Button>
                 </Form.Item>
               </Form>

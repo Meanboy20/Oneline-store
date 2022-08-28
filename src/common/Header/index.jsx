@@ -12,6 +12,7 @@ const Header = ({
   quantityInCart,
   userName,
   totalPrice,
+  setSearchInput,
 }) => {
   const { Header } = Layout;
   return (
@@ -19,7 +20,15 @@ const Header = ({
       <span className="header-container">
         <span className="site-title">Management</span>
         <span className="s-box">
-          <input className="s-input" placeholder="search" type="text" />
+          <input
+            style={{ color: "black" }}
+            className="s-input"
+            placeholder="search"
+            type="text"
+            onChange={(e) => {
+              setSearchInput(e.target.value);
+            }}
+          />
         </span>
         <span> {userType === "unauthorized" ? null : `Hello ${userName}`}</span>
         <span className="sign-button" onClick={userOnClick}>

@@ -1,0 +1,40 @@
+.detail-container {
+  position: relative;
+  width: 1323px;
+  height: 682px;
+
+  background: rgb(245, 241, 241);
+  border-radius: 4px;
+
+  border: 2px solid blue;
+}
+
+img.productDetail-img {
+  position: absolute;
+  width: 550px;
+  height: 550px;
+  color: red;
+  border: red;
+  top: 50px;
+  left: 10px;
+}
+
+.plus-minus-container {
+  position: absolute;
+  left: 600px;
+  top: 400px;
+}
+
+.product-description {
+  position: absolute;
+  left: 600px;
+  top: 200px;
+  text-align: left;
+  padding-right: 1cm;
+}
+
+.product-name {
+  position: absolute;
+  left: 600px;
+  top: 100px;
+}

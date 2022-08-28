@@ -11,6 +11,7 @@ const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const users = require("./models/users");
 const products = require("./models/products");
+const promocodes = require("./models/promocodes");
 
 const app = express();
 app.use(cors());
@@ -44,6 +45,19 @@ db.once("open", () => {
 
 // Create new user
 app.post("/user", async (req, res) => {
+  let user;
+  try {
+    user = await users.find({
+      email: req.body.Email,
+    });
+    // console.log("user is ", user);
+    if (user.length !== 0) {
+      return res.status(404).json({ message: "User already registered" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+
   const newUser = new users({
     email: req.body.Email,
     password: req.body.password,
@@ -59,6 +73,7 @@ app.post("/user", async (req, res) => {
 
 //Sign in to get user info
 app.post("/authentication", getUserByEmail, async (req, res) => {
+  // console.log(req.body);
   res.json(res.user);
 });
 
@@ -77,7 +92,7 @@ app.patch("/user/:id", getUser, async (req, res) => {
   // if exists, update quantity)
   targetProductId >= 0
     ? (cart[targetProductId].quantity += req.body.quantity)
-    : (cart.push(req.body), console.log("Run code"));
+    : cart.push(req.body);
 
   if (targetProductId !== -1 && cart[targetProductId].quantity === 0) {
     cart.splice(targetProductId, 1);
@@ -96,6 +111,20 @@ app.get("", async (req, res) => {
   try {
     const productList = await products.find();
     res.json(productList);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+//check promotion code
+
+app.post("/promocode", async (req, res) => {
+  try {
+    const code = await promocodes.find({ promocode: req.body.code });
+    if (code[0] === undefined) {
+      res.status(404).json({ message: "Invalid promocode" });
+    }
+    res.status(200).json(code[0]);
+    // console.log(res);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -132,6 +161,10 @@ app.patch("/product/:id", getProduct, async (req, res) => {
   if (req.body.description != null) {
     res.product.description = req.body.description;
   }
+
+  if (req.body.image != null) {
+    res.product.image = req.body.image;
+  }
   try {
     const updateProduct = await res.product.save();
     res.json(updateProduct);
@@ -160,15 +193,17 @@ async function getUserByEmail(req, res, next) {
   try {
     user = await users.find({
       email: req.body.Email,
-      password: req.body.password,
     });
+    // console.log("user is ", user);
+    if (user.length === 0)
+      return res.status(404).json({ message: "Can not find user" });
 
-    if (user == null)
-      return res.status(404).json({ message: "can not find user" });
+    if (user[0].password !== req.body.password)
+      return res.status(404).json({ message: "Invalid password" });
+    res.user = user;
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-  res.user = user;
   next();
 }
 

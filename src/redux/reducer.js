@@ -9,11 +9,12 @@ const initialState = {
   userType: "unauthorized",
   shoppingCart: [],
   status: null,
+  error: null,
 };
 
 export const getProduct = createAsyncThunk("products/getProduct", async () => {
   try {
-    const response = await fetch("http://localhost:5000/");
+    const response = await fetch("http://localhost:8080/");
 
     const result = await response.json();
     return result;
@@ -29,7 +30,7 @@ export const updateProduct = createAsyncThunk(
 
     try {
       const response = await fetch(
-        `http://localhost:5000/product/${data.id}`,
+        `http://localhost:8080/product/${data.id}`,
         ajaxConfigHelper(data.value, "PATCH")
       );
       const result = await response.json();
@@ -44,7 +45,7 @@ export const addNewProduct = createAsyncThunk(
   async (data) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/product`,
+        `http://localhost:8080/product`,
         ajaxConfigHelper(data.value, "POST")
       );
       const result = await response.json();
@@ -57,10 +58,11 @@ export const addNewProduct = createAsyncThunk(
 export const addNewUser = createAsyncThunk("users/addNewUser", async (data) => {
   try {
     const response = await fetch(
-      `http://localhost:5000/user`,
+      `http://localhost:8080/user`,
       ajaxConfigHelper(data.value, "POST")
     );
     const result = await response.json();
+    return result;
   } catch (e) {
     console.log(e);
   }
@@ -70,7 +72,7 @@ export const addNewUser = createAsyncThunk("users/addNewUser", async (data) => {
 export const signInAuth = createAsyncThunk("users/addNewUser", async (data) => {
   try {
     const response = await fetch(
-      `http://localhost:5000/user`,
+      `http://localhost:8080/user`,
       ajaxConfigHelper(data.value, "POST")
     );
     const result = await response.json();
@@ -84,7 +86,7 @@ export const addShoppingCart = createAsyncThunk(
   async (data) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/user/${data.id}`,
+        `http://localhost:8080/user/${data.id}`,
         ajaxConfigHelper(data.value, "PATCH")
       );
       const result = await response.json();
@@ -105,11 +107,21 @@ const onlineStoreReducer = createSlice({
     },
 
     signIn: (state, action) => {
+      console.log("sign in reducer called");
+
+      if (action.payload.message === "Invalid password") {
+        console.log("reducer processes error");
+        return { ...state, error: "Invalid passord" };
+      } else if (action.payload.message === "Can not find user") {
+        console.log("reducer processes error");
+        return { ...state, error: "user not registered" };
+      } else action.payload = action.payload[0];
       return {
         ...state,
         userType: action.payload.userType,
         shoppingCart: action.payload.shoppingCart,
         userId: action.payload._id,
+        error: null,
         userName: action.payload.email.slice(
           0,
           action.payload.email.indexOf("@")
@@ -166,7 +178,7 @@ const onlineStoreReducer = createSlice({
       state.status = "loading";
     },
     [addShoppingCart.fulfilled]: (state, action) => {
-      console.log("payload is ", action.payload);
+      // console.log("payload is ", action.payload);
       state.status = "success";
       state.shoppingCart = action.payload.shoppingCart;
     },

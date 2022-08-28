@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import "antd/dist/antd.min.css";
 import "./index.css";
 import { Button, Checkbox, Form, Input } from "antd";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signInAuth } from "../../../../api";
 
 const SignIn = ({ changeModal, setVisible }) => {
+  const [isSignInError, setIsSignInError] = useState(null);
   const dispatch = useDispatch();
 
   const handleSigUpClick = () => {
@@ -16,9 +17,18 @@ const SignIn = ({ changeModal, setVisible }) => {
     changeModal("updatePassword");
   };
 
-  const onFinish = (values) => {
-    signInAuth(dispatch)(values);
-    setVisible(false);
+  const onFinish = async (values) => {
+    const result = await signInAuth(dispatch)(values);
+    // console.log("After sign in clicked", error);
+
+    if (result.message !== undefined) {
+      console.log(result.message);
+
+      setIsSignInError(result.message);
+    } else {
+      setIsSignInError(null);
+      setVisible(false);
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -80,6 +90,17 @@ const SignIn = ({ changeModal, setVisible }) => {
           }}
         >
           <Checkbox>Remember me</Checkbox>
+        </Form.Item>
+
+        <Form.Item
+          name="remember"
+          valuePropName="checked"
+          wrapperCol={{
+            offset: 8,
+            span: 16,
+          }}
+        >
+          <span style={{ color: "red" }}>{isSignInError}</span>
         </Form.Item>
 
         <Form.Item

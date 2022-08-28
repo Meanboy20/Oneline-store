@@ -7,16 +7,25 @@ import { useDispatch } from "react-redux";
 import { addNewUser } from "../../../../redux/reducer";
 
 const SignUp = ({ changeModal, setVisible }) => {
+  const [isSignInError, setIsSignInError] = useState(null);
+
   const dispatch = useDispatch();
   const handleSiginClick = () => {
     changeModal("signIn");
   };
-  const onFinish = (value) => {
-    dispatch(addNewUser({ value: value }));
-    setVisible(false);
+  const onFinish = async (value) => {
+    const result = await dispatch(addNewUser({ value: value }));
+    console.log(result);
 
-    alert("Create account successfully, please use sign in");
-    changeModal("signIn");
+    if (result.payload.message !== undefined) {
+      setIsSignInError(result.payload.message);
+    } else {
+      console.log("There is no error:");
+      setIsSignInError(null);
+      setVisible(false);
+      alert("Create account successfully, please use sign in");
+      changeModal("signIn");
+    }
   };
 
   return (
@@ -58,6 +67,15 @@ const SignUp = ({ changeModal, setVisible }) => {
           ]}
         >
           <Input.Password />
+        </Form.Item>
+        <Form.Item
+          wrapperCol={{
+            offset: 8,
+            span: 16,
+          }}
+          style={{ color: "red" }}
+        >
+          {isSignInError}
         </Form.Item>
 
         <Form.Item

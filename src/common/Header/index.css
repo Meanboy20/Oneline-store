@@ -43,3 +43,11 @@
   width: 500px;
   max-height: 50px;
 }
+
+@media (max-width: 1200px) {
+  .site-title,
+  .s-box,
+  .shopping-cart {
+    display: none;
+  }
+}

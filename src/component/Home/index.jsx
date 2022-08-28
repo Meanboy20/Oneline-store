@@ -17,19 +17,39 @@ import { getProduct, signOut } from "../../redux/reducer";
 function Home() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log("useEffect called");
-    dispatch(getProduct());
-  }, [dispatch]);
-
-  const { Content, Footer } = Layout;
-  const [isVisible, setVisible] = useState(false);
-  const [modalContent, setModalContent] = useState("signIn");
   const { shoppingCart, userType, userId, userName } = useSelector((state) => {
     return state.userReducer;
   });
   const products = useSelector((state) => {
     return state.productReducer;
+  });
+
+  useEffect(() => {
+    console.log("useEffect called");
+    dispatch(getProduct());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setDiscount(0);
+  }, [userType]);
+  // console.log("Home page render");
+
+  const { Content, Footer } = Layout;
+  const [searchInput, setSearchInput] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [isVisible, setVisible] = useState(false);
+  const [modalContent, setModalContent] = useState("signIn");
+
+  const productsOnSearch = products.products.filter((ele) => {
+    if (searchInput === "") {
+      return ele;
+    } else {
+      return (
+        ele.item[0].toLocaleLowerCase() ===
+          searchInput[0].toLocaleLowerCase() &&
+        ele.item.toLowerCase().includes(searchInput.toLocaleLowerCase(), 0)
+      );
+    }
   });
 
   const quantityInCart = shoppingCart.reduce(
@@ -78,7 +98,14 @@ function Home() {
       case "emailSent":
         return <PassWordResetting />;
       case "shoppingCart":
-        return <Cart shoppingCart={shoppingCart} userID={userId} />;
+        return (
+          <Cart
+            shoppingCart={shoppingCart}
+            userID={userId}
+            discount={discount}
+            setDiscount={setDiscount}
+          />
+        );
       default:
         return <SignIn />;
     }
@@ -91,8 +118,11 @@ function Home() {
         userOnClick={handleUserIconClick}
         cartOnClick={handleCartClick}
         quantityInCart={quantityInCart}
-        totalPrice={(Math.round(totalPrice * 100) / 100).toFixed(2)}
+        totalPrice={(Math.round((totalPrice - discount) * 100) / 100).toFixed(
+          2
+        )}
         userName={userName}
+        setSearchInput={setSearchInput}
       />
 
       <Content
@@ -102,7 +132,7 @@ function Home() {
       >
         <div className="site-layout-content">
           <ProductList
-            productList={products.products}
+            productList={productsOnSearch}
             userType={userType}
             userID={userId}
             shoppingCart={shoppingCart}
