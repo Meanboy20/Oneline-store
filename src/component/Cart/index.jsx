@@ -34,6 +34,8 @@ const Cart = ({ shoppingCart, userID, discount, setDiscount }) => {
     0
   );
 
+  // console.log("discount: ", discount);
+
   const finalAmount = totalPrice - discount >= 0 ? totalPrice - discount : 0;
 
   return (
@@ -88,9 +90,10 @@ const Cart = ({ shoppingCart, userID, discount, setDiscount }) => {
         )}
       />
       <div>
-        <span>
-          Promotion code
+        <span className="promoCode">
+          Code
           <Input
+            className="promo-input"
             onChange={(e) => {
               setInputCode(e.target.value);
             }}
@@ -100,19 +103,22 @@ const Cart = ({ shoppingCart, userID, discount, setDiscount }) => {
               Apply
             </button>
           ) : (
-            <button onClick={() => setDiscount(0)}>Cancel</button>
+            <button onClick={() => setDiscount(0)}>Remove</button>
           )}
         </span>
       </div>
+      <div className="checkOut-bar">
+        <div>Totoal: ${(Math.round(finalAmount * 100) / 100).toFixed(2)}</div>
 
-      <Button>Check out</Button>
-      {invalidCode !== undefined ? (
-        <span style={{ color: "red" }}>{invalidCode}</span>
-      ) : null}
-      <div>Totoal: ${(Math.round(finalAmount * 100) / 100).toFixed(2)}</div>
-      <span hidden={discount === 0 ? "hidden" : null}>
-        Promocode applied -${discount}
-      </span>
+        {invalidCode !== undefined ? (
+          <span style={{ color: "red" }}>{invalidCode}</span>
+        ) : null}
+
+        <span hidden={discount === 0 ? "hidden" : null}>
+          Promocode applied -${discount}
+        </span>
+        <Button>Check out</Button>
+      </div>
     </div>
   );
 };

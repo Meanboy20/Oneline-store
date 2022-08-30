@@ -18,7 +18,11 @@ const Header = ({
   return (
     <Header>
       <span className="header-container">
-        <span className="site-title">Management</span>
+        <span className="site-title">
+          <a style={{ color: "white" }} href="/">
+            Management
+          </a>
+        </span>
         <span className="s-box">
           <input
             style={{ color: "black" }}
@@ -30,7 +34,10 @@ const Header = ({
             }}
           />
         </span>
-        <span> {userType === "unauthorized" ? null : `Hello ${userName}`}</span>
+        <span className="welcome">
+          {" "}
+          {userType === "unauthorized" ? null : `Hello ${userName}`}
+        </span>
         <span className="sign-button" onClick={userOnClick}>
           <a>
             <UserOutlined />{" "}

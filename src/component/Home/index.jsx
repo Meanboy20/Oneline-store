@@ -140,6 +140,7 @@ function Home() {
         </div>
       </Content>
       <Modal
+        modalContent={modalContent}
         width={"393px"}
         visible={isVisible}
         setVisible={handleCloseModal}

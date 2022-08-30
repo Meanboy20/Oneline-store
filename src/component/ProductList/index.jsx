@@ -47,7 +47,7 @@ export const ProductList = ({
           });
 
           return (
-            <List.Item>
+            <List.Item className="product-card">
               <a href={`/product/${item._id}`}>
                 <Card title={item.item} cover={<img src={item.image} />}>
                   <div>Price: ${item.price}</div>

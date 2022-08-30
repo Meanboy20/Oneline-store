@@ -1,0 +1,17 @@
+.promoCode {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px;
+}
+
+.promoCode-Input {
+  width: 13px;
+  height: 5px;
+}
+
+.checkOut-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  align-items: center;
+}

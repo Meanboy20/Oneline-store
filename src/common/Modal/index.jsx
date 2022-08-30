@@ -5,25 +5,32 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 import "./index.css";
 
 const MyModal = (props) => {
-  const { children, titleText, width, visible, setVisible, changeContent } =
-    props;
+  const {
+    children,
+    titleText,
+    width,
+    visible,
+    setVisible,
+    changeContent,
+    modalContent,
+  } = props;
+  // console.log(modalContent);
 
   return (
-    <>
-      <Modal
-        width={width}
-        closeIcon={<CloseCircleOutlined />}
-        // title={<div className="modal-title">{titleText}</div>}
-        visible={visible}
-        footer={null}
-        changeContent={changeContent}
-        onCancel={() => {
-          setVisible(false);
-        }}
-      >
-        {children}
-      </Modal>
-    </>
+    <Modal
+      className={modalContent}
+      width={width}
+      closeIcon={<CloseCircleOutlined />}
+      // title={<div className="modal-title">{titleText}</div>}
+      visible={visible}
+      changeContent={changeContent}
+      onCancel={() => {
+        setVisible(false);
+      }}
+      footer={null}
+    >
+      {children}
+    </Modal>
   );
 };
 

@@ -16,6 +16,7 @@ const ProductDetail = (item) => {
   const dispatch = useDispatch();
   const param = useParams();
   const [isVisible, setVisible] = useState(false);
+
   const { shoppingCart, userType, userId, userName } = useSelector((state) => {
     return state.userReducer;
   });
@@ -140,14 +141,22 @@ const ProductDetail = (item) => {
               </div>
             </div>
             <Modal
+              className="shoppingCart"
               width={"393px"}
               visible={isVisible}
               setVisible={setVisible}
               onCancel={() => {
                 setVisible(false);
               }}
+              footer={null}
             >
-              {<Cart shoppingCart={shoppingCart} userID={userId} />}
+              {
+                <Cart
+                  shoppingCart={shoppingCart}
+                  userID={userId}
+                  discount={0}
+                />
+              }
             </Modal>
           </div>
         </Content>
@@ -157,7 +166,7 @@ const ProductDetail = (item) => {
           }}
         >
           2022 All Right Resvered
-        </Footer>{" "}
+        </Footer>
       </Layout>
     </>
   );

@@ -15,7 +15,6 @@ const SignUp = ({ changeModal, setVisible }) => {
   };
   const onFinish = async (value) => {
     const result = await dispatch(addNewUser({ value: value }));
-    console.log(result);
 
     if (result.payload.message !== undefined) {
       setIsSignInError(result.payload.message);

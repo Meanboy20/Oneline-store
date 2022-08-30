@@ -31,23 +31,29 @@
 
 .s-box {
   display: flex;
-  align-items: center;
+  align-items: top;
   padding: 10px;
-  min-height: 30px;
+  min-height: 25px;
+  min-width: 100px;
+  max-width: 500px;
 }
 
 .s-input {
   border: 1px solid #ddd;
   font-size: 16px;
   border-radius: 10px;
-  width: 500px;
+  min-width: 500px;
+  max-width: 300px;
   max-height: 50px;
 }
 
 @media (max-width: 1200px) {
   .site-title,
-  .s-box,
+  .welcome,
   .shopping-cart {
     display: none;
+  }
+  .s-input {
+    min-width: 100px;
   }
 }

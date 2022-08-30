@@ -8,6 +8,7 @@
   background: #fff;
   text-align: center;
 }
+
 .logo {
   float: left;
   width: 120px;
@@ -21,4 +22,15 @@
 }
 [data-theme="dark"] .site-layout-content {
   background: #141414;
+}
+
+@media (max-width: 900px) {
+  .ant-row {
+    flex-direction: column;
+  }
+
+  .ant-row > * {
+    min-width: 300px;
+    min-height: 400px;
+  }
 }

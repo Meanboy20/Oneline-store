@@ -93,8 +93,8 @@ const SignIn = ({ changeModal, setVisible }) => {
         </Form.Item>
 
         <Form.Item
-          name="remember"
-          valuePropName="checked"
+          className="errorMessage"
+          name="signInError"
           wrapperCol={{
             offset: 8,
             span: 16,

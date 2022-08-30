@@ -26,7 +26,7 @@ export const getProduct = createAsyncThunk("products/getProduct", async () => {
 export const updateProduct = createAsyncThunk(
   "products/updateProduct",
   async (data) => {
-    console.log("data is ", data);
+    // console.log("data is ", data);
 
     try {
       const response = await fetch(
@@ -107,7 +107,7 @@ const onlineStoreReducer = createSlice({
     },
 
     signIn: (state, action) => {
-      console.log("sign in reducer called");
+      // console.log("sign in reducer called");
 
       if (action.payload.message === "Invalid password") {
         console.log("reducer processes error");

@@ -1,0 +1,13 @@
+.shoppingCart {
+  position: absolute;
+  right: 0px;
+  top: 64px;
+  background-color: black;
+}
+
+@media (max-width: 800px) {
+  .ant-modal.signIn {
+    max-height: 200px;
+    background-color: blue;
+  }
+}
